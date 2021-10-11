@@ -4,6 +4,16 @@ const cTable = require('console.table');
 const mysql = require('mysql2');
 const echo = require('node-echo');
 
+var express = require('express');  
+var app = express();
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+////////////////////////////////////////////////////////////////
+////////////Dependencies////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
 //Yoinked from another similar github, cool effect ! https://github.com/karur0su/Employee-Management-System/blob/master/app.js
 echo ("                                                                                                                                                                             ");
 echo ("                                                                                                                                                                             ");
@@ -40,14 +50,75 @@ function prompts (){
           type: 'list',
           message: 'What would you like to do?',
           name: 'optionsList',
-          choices: ["View all Employees", "View All Roles", "View All Departments"]
-        }])        
+          choices: ["View all Employees", "View All Roles", "View All Departments", "Quit"],
+          name:"choice" //cleans up the output
+        }
+      
+      ])        
         .then((res) => {
-          console.log(res)
+          console.log(res.choice); //shows output of res
+
+          switch(res.choice){
+
+            case "View all Employees":
+            employeeView();
+            break;
+
+            case "View All Roles":
+            roleView()
+            break;
+
+            case "View All Departments":
+            departmentView()
+            break;
 
 
-        })
-      
-      
-      
-      }
+
+
+
+
+
+
+
+            case "Quit":
+            db.end();
+            console.log("Bye!")
+            break;
+
+
+
+
+
+          }
+
+          })}
+
+
+
+///////////////////////////////////
+//////Functions below/////////////
+/////////////////////////////////
+
+   const employeeView =  () => {
+    db.query("SELECT employee.first_name, employee.last_name, roles.title, roles.salary, department.dep_name AS department FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id", (err, res) =>  {
+      if (err) throw err;
+      console.table(res)
+      prompts()
+    });
+  } 
+
+  const roleView =  () => {
+    db.query("SELECT roles.id, roles.title,  department.dep_name AS department, roles.salary FROM roles LEFT JOIN department ON roles.department_id = department.id", (err, res) =>  {
+      if (err) throw err;
+      console.table(res)
+      prompts()
+    });
+  } 
+
+  const departmentView =  () => {
+    db.query("SELECT department.id, department.dep_name AS department FROM department", (err, res) =>  {
+      if (err) throw err;
+      console.table(res)
+      prompts()
+    });
+  } 
