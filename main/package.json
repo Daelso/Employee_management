@@ -17,8 +17,11 @@
   },
   "homepage": "https://github.com/Daelso/Employee_management#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "dotenv": "^10.0.0",
     "env": "0.0.2",
-    "inquirer": "^8.2.0"
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.0",
+    "node-echo": "^0.1.1"
   }
 }
