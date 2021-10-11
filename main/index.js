@@ -41,19 +41,19 @@ const db = mysql.createConnection(
 //Upon connection calls the inquirer prompt function, kicking things off.
 db.connect((err) => {
   if (err) throw err;
-  prompts();
+  start();
 }); 
 
-function prompts (){
+function start (){
     inquirer.prompt([
         {
           type: 'list',
           message: 'What would you like to do?',
           name: 'optionsList',
-          choices: ["View all Employees", "View All Roles", "View All Departments", "Quit"],
+          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a department", "Quit"],
           name:"choice" //cleans up the output
         }
-      
+
       ])        
         .then((res) => {
           console.log(res.choice); //shows output of res
@@ -72,26 +72,18 @@ function prompts (){
             departmentView()
             break;
 
-
-
-
-
-
-
-
+            case "Add a department":
+            addDepartment()
+            break;
 
             case "Quit":
             db.end();
             console.log("Bye!")
             break;
-
-
-
-
-
           }
 
           })}
+
 
 
 
@@ -103,7 +95,7 @@ function prompts (){
     db.query("SELECT employee.first_name, employee.last_name, roles.title, roles.salary, department.dep_name AS department FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id", (err, res) =>  {
       if (err) throw err;
       console.table(res)
-      prompts()
+      start()
     });
   } 
 
@@ -111,7 +103,7 @@ function prompts (){
     db.query("SELECT roles.id, roles.title,  department.dep_name AS department, roles.salary FROM roles LEFT JOIN department ON roles.department_id = department.id", (err, res) =>  {
       if (err) throw err;
       console.table(res)
-      prompts()
+      start()
     });
   } 
 
@@ -119,6 +111,32 @@ function prompts (){
     db.query("SELECT department.id, department.dep_name AS department FROM department", (err, res) =>  {
       if (err) throw err;
       console.table(res)
-      prompts()
+      start()
     });
   } 
+
+  const addDepartment = () => {
+    inquirer.prompt({
+        name: "addDepartment",
+        type: "input",
+        message: "What is the name of the department?"
+      }) 
+    .then((answer) => {
+
+      let department = answer.addDepartment
+      console.log(department)
+
+      let sql = "INSERT INTO department (dep_name) VALUES (?)"
+      db.query(sql, department, (err, res) => {
+        if (err) throw err;
+        start()
+      })
+
+
+    }
+    
+    
+    
+    )
+    
+    }
