@@ -9,7 +9,7 @@
 
 This project was made to better understand Express.js and how it works/weaves through various pieces of code. In this project I learned how to create working get, post and delete functions. 
 
-![Demo here](demogif.gif)
+![Demo here](https://www.youtube.com/watch?v=1zqqBs2O7U4)
 
 
 ## Table of Contents
