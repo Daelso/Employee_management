@@ -50,7 +50,7 @@ function start (){
           type: 'list',
           message: 'What would you like to do?',
           name: 'optionsList',
-          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a department", "Add a new Employee", "Quit"],
+          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a new department", "Add a new role", "Add a new Employee", "Quit"],
           name:"choice" //cleans up the output
         }
 
@@ -72,8 +72,12 @@ function start (){
             departmentView()
             break;
 
-            case "Add a department":
+            case "Add a new department":
             addDepartment()
+            break;
+
+            case "Add a new role":
+            addRole()
             break;
 
             case "Add a new Employee":
@@ -144,6 +148,60 @@ function start (){
       })}
 
 
+      const addRole = () => {
+        inquirer.prompt([
+          
+          {
+            name: "addRoleName",
+            type: "input",
+            message: "What is the new role's name?"
+          },
+
+          {
+            name: "roleSalary",
+            type: "input",
+            message: "What is the new role's salary?",
+            validate: numInput => {
+              if(isNaN(numInput)){
+                console.log("Please enter a valid salary amount!")
+                return false
+              }
+              else{
+                return true}}
+          },    
+
+          {
+            name: "depNum",
+            type: "input",
+            message: "Please input a valid department ID number #",
+            validate: numInput => {
+              if(isNaN(numInput)){
+                console.log("Please enter a valid department ID amount! (View all departments for valid numbers)")
+                return false
+              }
+              else{
+                return true}}
+          },           
+        
+        ]) 
+        .then((answer) => {
+          let roleName = answer.addRoleName;
+          let roleSalary = answer.roleSalary;
+          let depNum = answer.depNum;
+
+          console.log(roleName, roleSalary, depNum)
+          let sql = `INSERT INTO roles (title, salary, department_id) VALUES ('${roleName}', ${roleSalary}, ${depNum})`
+
+          db.query(sql, (err, res) => {
+            if (err) throw err;
+            console.log(`New role successfully added to the database!`)
+            start()
+            })
+
+          })}      
+
+
+
   const addEmployee = () => {
     inquirer.prompt([
       
@@ -204,6 +262,8 @@ let sql1 = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VA
 
 db.query(sql1, (err, res) => {
   if (err) throw err;
+  console.log(`New employee successfully added to the database!`)
+  start()
   })
 
 
