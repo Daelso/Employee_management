@@ -1,5 +1,5 @@
 
-# Title: 11 Express.js Note Taker
+# Title: 12 Inquirer/SQL Employee Management Program
 
 ![badge](https://img.shields.io/badge/license-MIT-darkred) [![made-with-javascript](https://img.shields.io/badge/Made%20with-JavaScript-1f425f.svg)](https://www.javascript.com) 
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
@@ -9,7 +9,7 @@
 
 This project was made to better understand Express.js and how it works/weaves through various pieces of code. In this project I learned how to create working get, post and delete functions. 
 
-![Demo here](https://www.youtube.com/watch?v=1zqqBs2O7U4)
+[![Youtube video here](https://www.youtube.com/watch?v=1zqqBs2O7U4/0.jpg)](https://www.youtube.com/watch?v=1zqqBs2O7U4)
 
 
 ## Table of Contents
