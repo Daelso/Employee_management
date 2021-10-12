@@ -50,7 +50,7 @@ function start (){
           type: 'list',
           message: 'What would you like to do?',
           name: 'optionsList',
-          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a department", "Quit"],
+          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a department", "Add a new Employee", "Quit"],
           name:"choice" //cleans up the output
         }
 
@@ -76,6 +76,10 @@ function start (){
             addDepartment()
             break;
 
+            case "Add a new Employee":
+            addEmployee()
+            break;
+
             case "Quit":
             db.end();
             console.log("Bye!")
@@ -91,8 +95,10 @@ function start (){
 //////Functions below/////////////
 /////////////////////////////////
 
+
+//viewing functions
    const employeeView =  () => {
-    db.query("SELECT employee.first_name, employee.last_name, roles.title, roles.salary, department.dep_name AS department FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id", (err, res) =>  {
+    db.query("SELECT employee.first_name, employee.last_name, employee.manager_id, roles.title, roles.salary, department.dep_name AS department FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id", (err, res) =>  {
       if (err) throw err;
       console.table(res)
       start()
@@ -115,6 +121,9 @@ function start (){
     });
   } 
 
+
+// Adding functions
+
   const addDepartment = () => {
     inquirer.prompt({
         name: "addDepartment",
@@ -124,19 +133,80 @@ function start (){
     .then((answer) => {
 
       let department = answer.addDepartment
-      console.log(department)
 
       let sql = "INSERT INTO department (dep_name) VALUES (?)"
+
       db.query(sql, department, (err, res) => {
         if (err) throw err;
-        start()
-      })
+        console.log(`${department} successfully added to departments!`)
+        start()}
+        )
+      })}
 
 
+  const addEmployee = () => {
+    inquirer.prompt([
+      
+      {
+      type: "input",
+      message: "What is the new employee's first name?",
+      name: "first_name"
+  },
+
+  {
+      type: "input",
+      message: "What is the new employee's last name?",
+      name: "last_name"
+},
+
+{
+  type: "input",
+  message: "What is the new employee's role ID?",
+  name: "role",
+  validate: numInput => {
+    if(isNaN(numInput)){
+      console.log("Please enter a valid role number! (Usually between 1-4)")
+      return false
     }
-    
-    
-    
-    )
-    
+    else{
+      return true
+
     }
+
+  }
+},
+
+{
+  type: "input",
+  message: "Please enter their manager's ID #",
+  name: "manager",
+  validate: numInput => {
+    if(isNaN(numInput)){
+      console.log("Please enter a valid manager ID number!")
+      return false
+    }
+    else{
+      return true
+
+    }
+
+  }
+}])
+.then((answers)=> {
+let firstName = answers.first_name
+let lastName = answers.last_name
+let newRole = answers.role 
+let newManager = answers.manager
+
+console.log(firstName,lastName,newRole,newManager)
+
+let sql1 = "INSERT INTO employee (first_name, last_name) VALUES (?), (?)"
+
+db.query(sql1, firstName, lastName, (err, res) => {
+  if (err) throw err;
+  })
+
+
+})
+
+}
