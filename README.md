@@ -7,9 +7,9 @@
 
 ## Description:
 
-This project was made to better understand Express.js and how it works/weaves through various pieces of code. In this project I learned how to create working get, post and delete functions. 
+This project combines my existing knowledge of javascript and express.js with mySQL2. Through using the node module inquirer I created a program that manages departments, roles and employees within an SQL database. This was a very helpful assignment in learning various CRUD queries.
 
-[![Youtube video here](https://www.youtube.com/watch?v=1zqqBs2O7U4/0.jpg)](https://www.youtube.com/watch?v=1zqqBs2O7U4)
+[![Youtube demo](https://www.youtube.com/watch?v=1zqqBs2O7U4/0.jpg)](https://www.youtube.com/watch?v=1zqqBs2O7U4)
 
 
 ## Table of Contents
@@ -19,15 +19,14 @@ This project was made to better understand Express.js and how it works/weaves th
 - [Contributing](#contributing)
 - [License](#license)
 - [Questions](#questions)
-- [Deployment](#deployment)
 
 ## Installation Instructions:
 
-This requires both express.js and uuid. Open the terminal and begin with ```npm init``` followed by ```npm i express```, then ```npm i uuid``` as node modules are not included in this repo. This will allow for full functionality.
+This requires express.js, node.js, mysql2 and inquirer. Open the terminal and begin with ```npm init``` followed by ```npm i``` to hopefully automatically install all required dependencies. If it fails, manually install each with  ```npm i express```, then ```npm i mysql2``` followed by ```npm inquirer```. ```npm node-echo``` is required for the fun ASCII art. As node modules are not included in this repo. This will allow for full functionality.
 
 ## Usage:
 
-To quickly create a team tracking page that includes, employee IDs, ranks, email. For engineers and interns this can include github links or schools.
+To dynamically manage a database consisting of tables of departments, roles and employees. Has various CRUD features to view, add and remove from each table.
 
 ## Contributing:
 
@@ -45,8 +44,4 @@ This application is covered under the MIT license.
 ## Questions:
 
   Feel free to email me at: cmurtau@g.clemson.edu
-  
-## Deployment: 
-
-Try it out at: https://placid-plateau.herokuapp.com/
 
