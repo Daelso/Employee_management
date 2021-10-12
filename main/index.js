@@ -148,6 +148,7 @@ function start (){
       db.query(`SELECT * FROM employee WHERE manager_id=${answer.selectManager}`, (err, res) =>  {
         if (err) throw err;
         console.table(res)
+        console.log(`Above displays all employees who are managed by manager ID #:${answer.selectManager}`)
         start()
       });
 
