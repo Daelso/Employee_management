@@ -200,9 +200,9 @@ let newManager = answers.manager
 
 console.log(firstName,lastName,newRole,newManager)
 
-let sql1 = "INSERT INTO employee (first_name, last_name) VALUES (?), (?)"
+let sql1 = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', ${newRole}, ${newManager})`
 
-db.query(sql1, firstName, lastName, (err, res) => {
+db.query(sql1, (err, res) => {
   if (err) throw err;
   })
 
