@@ -38,7 +38,7 @@ function start (){
           type: 'list',
           message: 'What would you like to do?',
           name: 'optionsList',
-          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a new department", "Add a new role", "Add a new Employee", "Update an employee role", "Delete a row (Department/Role/Employee)", "Quit"],
+          choices: ["View all Employees", "View All Roles", "View All Departments", "View employee by Manager", "Add a new department", "Add a new role", "Add a new Employee", "Update an employee role", "Delete a row (Department/Role/Employee)", "Quit"],
           name:"choice" //cleans up the output
         }
 
@@ -59,6 +59,12 @@ function start (){
             case "View All Departments":
             departmentView()
             break;
+
+            case "View employee by Manager":
+            managerView()
+            break;
+
+
 
             case "Add a new department":
             addDepartment()
@@ -122,6 +128,31 @@ function start (){
       start()
     });
   } 
+
+  const managerView =  () => {
+    inquirer.prompt({
+      name: "selectManager",
+      type: "input",
+      message: "Input the desired manager's ID #",
+      validate: numInput => {
+        if(isNaN(numInput)){
+          console.log("Please enter a valid salary amount!")
+          return false
+        }
+        else{
+          return true}}
+    }) 
+    .then((answer) =>{
+      console.log(answer.selectManager)
+        
+      db.query(`SELECT * FROM employee WHERE manager_id=${answer.selectManager}`, (err, res) =>  {
+        if (err) throw err;
+        console.table(res)
+        start()
+      });
+
+
+    })} 
 
 
 // Adding functions
