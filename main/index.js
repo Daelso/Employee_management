@@ -1,8 +1,7 @@
 const inquirer = require('inquirer');
-const util = require("util");
 const cTable = require('console.table');
-const mysql = require('mysql2');
-const echo = require('node-echo');
+const echo = require('node-echo'); //required for ascii art
+const db = require("./connection")
 
 var express = require('express');  
 var app = express();
@@ -27,17 +26,6 @@ echo ("########## ###       ### ###        ########## ########     ###    ######
 echo ("                                                                                                                                                                             ");
 echo ("                                                                                                                                                                     ver 1.0 ");
 
-//Normal SQL connection until I figure out env files
-const db = mysql.createConnection(
-  {
-    host: 'localhost',
-    user: 'root',
-    password: 'Ganbatte23!',
-    database: 'employee_management'
-  },
-  console.log(`Connected to the employee_management database.`)
-);
-
 //Upon connection calls the inquirer prompt function, kicking things off.
 db.connect((err) => {
   if (err) throw err;
@@ -50,7 +38,7 @@ function start (){
           type: 'list',
           message: 'What would you like to do?',
           name: 'optionsList',
-          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a new department", "Add a new role", "Add a new Employee", "Quit"],
+          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a new department", "Add a new role", "Add a new Employee", "Update an employee role", "Quit"],
           name:"choice" //cleans up the output
         }
 
@@ -84,6 +72,10 @@ function start (){
             addEmployee()
             break;
 
+            case "Update an employee role":
+            updateEmployee()
+            break;
+
             case "Quit":
             db.end();
             console.log("Bye!")
@@ -102,7 +94,7 @@ function start (){
 
 //viewing functions
    const employeeView =  () => {
-    db.query("SELECT employee.first_name, employee.last_name, employee.manager_id, roles.title, roles.salary, department.dep_name AS department FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id", (err, res) =>  {
+    db.query("SELECT employee.id AS employee_id, employee.first_name, employee.last_name, employee.manager_id, roles.title, roles.salary, department.dep_name AS department FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id", (err, res) =>  {
       if (err) throw err;
       console.table(res)
       start()
@@ -270,3 +262,58 @@ db.query(sql1, (err, res) => {
 })
 
 }
+
+/////////////////////////////////////
+///////////////Update///////////////
+///////////////////////////////////
+const updateEmployee = () => {
+  inquirer.prompt([
+    
+    {
+      name: "updateEmployee",
+      type: "input",
+      message: "Enter the desired employee's ID #",
+      validate: numInput => {
+        if(isNaN(numInput)){
+          console.log("The input must be a valid number!")
+          return false
+        }
+        else{
+          return true
+    
+        }
+    
+      }
+    },
+  
+    {
+      name: "updateRole",
+      type: "input",
+      message: "Enter the desired employee's new role ID number",
+      validate: numInput => {
+        if(isNaN(numInput)){
+          console.log("The input must be a valid number!")
+          return false
+        }
+        else{
+          return true
+    
+        }
+    
+      }
+    }
+
+
+  ]) 
+  .then((answer) => {
+    let employeeID = answer.updateEmployee
+    let newRoleID = answer.updateRole
+    console.log(employeeID, newRoleID)
+
+    let sql = `UPDATE employee SET role_id=${newRoleID} WHERE id=${employeeID}`
+    db.query(sql, (err, res) => {
+      if (err) throw err;
+      console.log(`Employee ID: ${employeeID} role ID switched to ${newRoleID} successfully!`)
+      start()
+      })
+    })}
