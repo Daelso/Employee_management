@@ -24,6 +24,8 @@ This project combines my existing knowledge of javascript and express.js with my
 
 This requires express.js, node.js, mysql2 and inquirer. Open the terminal and begin with ```npm init``` followed by ```npm i``` to hopefully automatically install all required dependencies. If it fails, manually install each with  ```npm i express```, then ```npm i mysql2``` followed by ```npm inquirer```. ```npm node-echo``` is required for the fun ASCII art. As node modules are not included in this repo. This will allow for full functionality.
 
+Run the program by opening your terminal in the main folder and typing ```node index.js```
+
 ## Usage:
 
 To dynamically manage a database consisting of tables of departments, roles and employees. Has various CRUD features to view, add and remove from each table.
