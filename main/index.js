@@ -38,7 +38,7 @@ function start (){
           type: 'list',
           message: 'What would you like to do?',
           name: 'optionsList',
-          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a new department", "Add a new role", "Add a new Employee", "Update an employee role", "Quit"],
+          choices: ["View all Employees", "View All Roles", "View All Departments", "Add a new department", "Add a new role", "Add a new Employee", "Update an employee role", "Delete a row (Department/Role/Employee)", "Quit"],
           name:"choice" //cleans up the output
         }
 
@@ -75,6 +75,12 @@ function start (){
             case "Update an employee role":
             updateEmployee()
             break;
+
+
+            case "Delete a row (Department/Role/Employee)":
+            deleteaRow()
+            break;
+
 
             case "Quit":
             db.end();
@@ -317,3 +323,47 @@ const updateEmployee = () => {
       start()
       })
     })}
+
+////////////////////////////////////////////
+////////////Delete functions///////////////
+//////////////////////////////////////////
+const deleteaRow = () => {
+  inquirer.prompt([
+    {
+      type: 'list',
+      message: 'Choose which table to delete a row from',
+      name: 'tableSelect',
+      choices: ["department", "roles", "employee"],
+      name:"choice" //cleans up the output
+  },
+
+  {
+    type: 'input',
+    message: 'Input an id number to delete!',
+    name: 'idSelect',
+    validate: numInput => {
+      if(isNaN(numInput)){
+        console.log("Please enter a valid ID number!")
+        return false
+      }
+      else{
+        return true
+  
+      }
+  
+    }
+}])
+  .then((res) => {
+    let tableChoice = res.choice
+    let idChoice = res.idSelect
+    console.log(tableChoice, idChoice)
+
+    let sql = `DELETE FROM ${tableChoice} WHERE id=${idChoice}`
+
+    db.query(sql, (err, res) => {
+      if (err) throw err;
+      console.log(`ID #: ${idChoice} has been deleted from table: ${tableChoice}`)
+      start()
+      })
+
+  })}
